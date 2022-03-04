@@ -1,5 +1,6 @@
 package org.schabi.newpipe.extractor.services.youtube.extractors;
 
+import static org.mozilla.javascript.Context.VERSION_1_8;
 import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.getJsonPostResponse;
 import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.prepareDesktopJsonBuilder;
 import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
@@ -203,8 +204,12 @@ public class YoutubeCommentsExtractor extends CommentsExtractor {
         if (onResponseReceivedEndpoints.isEmpty()) {
             return;
         }
-        final JsonObject commentsEndpoint =
-                onResponseReceivedEndpoints.getObject(onResponseReceivedEndpoints.size() - 1);
+        JsonObject commentsEndpoint;
+        try {
+            commentsEndpoint = onResponseReceivedEndpoints.getObject(onResponseReceivedEndpoints.size() - 1);
+        } catch (final Exception e) {
+            return;
+        }
 
         final String path;
 
